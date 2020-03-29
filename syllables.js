@@ -3,6 +3,29 @@ function isLetter(str) {
   return str.length === 1 && str.match(/[a-z]/i);
 }
 
+function splittoSyllables(word,exception,Separator)
+{
+  let syllableword = "";
+  let sourceposition = 0;
+
+  for (let i = 0; i < exception.length; i++ )
+  {
+    if ( exception.charAt(i) == Separator )
+    {
+      syllableword = syllableword + Separator
+    }
+    else
+    {
+      syllableword = syllableword + word.charAt(sourceposition);
+
+      sourceposition = sourceposition + 1;
+    }
+  }
+
+
+  return syllableword;
+}
+
 
 function convertText(configuration)
 {
@@ -15,6 +38,8 @@ function convertText(configuration)
 
       let hyphenator = configuration.hyphenator;
 
+      let SourceSeparator = configuration.SourceSeparator;
+
 
       let exceptionsMap = new Map();
 
@@ -22,8 +47,8 @@ function convertText(configuration)
 
       for (let n = 0; n < exceptions.length; n++ )
       {
-        let key = exceptions[n].split(" ").join("");
-        let value = exceptions[n].split(" ").join(Separator);
+        let key = exceptions[n].toLowerCase().split(SourceSeparator).join("");
+        let value = exceptions[n].toLowerCase().split(SourceSeparator).join(Separator);
 
 	exceptionsMap.set(key,value);
       }
@@ -49,7 +74,7 @@ function convertText(configuration)
             lastchar = "";
           }
 
-          let syllableword = exceptionsMap.has(currentWord) ? exceptionsMap.get( currentWord ) : hyphenator( currentWord ) ;
+          let syllableword = exceptionsMap.has(currentWord.toLowerCase()) ? splittoSyllables( currentWord, exceptionsMap.get( currentWord.toLowerCase() ), Separator ) : hyphenator( currentWord ) ;
 
           let Syllables = syllableword.split(configuration.Separator);
 
