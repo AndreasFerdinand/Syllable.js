@@ -10,3 +10,51 @@ Download the latest release of [Hyphenopoly](https://github.com/mnater/Hyphenopo
 * patterns/LANGUAGE.wasm
 
 Replace LANGUAGE with the language you actually need. Additionally you need the latest release of Syllable.js.
+
+## Usage
+First you have to load and initialize Hyphenopoly.
+```HTML
+<script>
+var Separator = "•";
+
+var Hyphenopoly = {
+  "require": {
+    "de": "FORCEHYPHENOPOLY"
+  },
+  "setup": {
+    "exceptions": { "global" : ""},
+    "selectors": {
+      ".hyphenate": {
+        "hyphen": Separator,
+        "minWordLength": 3
+      }
+    }
+  }
+}
+</script>
+<script src="./Hyphenopoly_Loader.js"></script>
+```
+
+Then you can use Syllable.js:
+```HTML
+<script src="./syllables.js"></script>
+<script>
+...
+    Hyphenopoly.hyphenators["en"].then((hyphenator) => {
+
+      let SyllableConfig = {
+        Separator: Separator,
+        SourceSeparator: " ",
+        SourceText : "Some Source Text",
+        FirstColor : "blue",
+        SecondColor : "red",
+        Exceptions : [ "S o m e" ],
+        hyphenator : hyphenator
+      };
+
+      let SyllableText = convertText( SyllableConfig );
+
+    });
+...
+</script>
+```
