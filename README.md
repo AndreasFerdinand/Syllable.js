@@ -1,5 +1,5 @@
 # Syllable.js
-This project was created during the [coronavirus pandemic](https://en.wikipedia.org/wiki/2019%E2%80%9320_coronavirus_pandemic) when schools were closed. The aim of the project was the creation of new web application where children can enhance their reading skills using the Syllable-Method.
+This project was created during the [coronavirus pandemic](https://en.wikipedia.org/wiki/2019%E2%80%9320_coronavirus_pandemic) when schools were closed. The aim of the project was the creation of a new web application where children can enhance their reading skills using the Syllable-Method.
 
 ## Install
 Download the latest release of [Hyphenopoly](https://github.com/mnater/Hyphenopoly). You need the follwoing files/directories:
@@ -44,7 +44,7 @@ Then you can use Syllable.js:
 
       let SyllableConfig = {
         Separator: Separator,
-        SourceSeparator: " ",
+        ExceptionsSeparator: " ",
         SourceText : "Some Source Text",
         FirstColor : "blue",
         SecondColor : "red",
@@ -58,3 +58,7 @@ Then you can use Syllable.js:
 ...
 </script>
 ```
+At least the follwoing attributes of the configuration must be set:
+
+* SourceText
+* hyphenator
