@@ -33,24 +33,28 @@ function convertText(configuration)
       let SourceText = configuration.SourceText;
       let TargetText = "";
 
-      let FirstColor = configuration.FirstColor;
-      let SecondColor = configuration.SecondColor;
+      let FirstColor = (typeof configuration.FirstColor === 'undefined') ? '#0000ff' : configuration.FirstColor;
+      let SecondColor = (typeof configuration.SecondColor === 'undefined') ? '#ff0000' : configuration.SecondColor;
 
       let hyphenator = configuration.hyphenator;
 
-      let SourceSeparator = configuration.SourceSeparator;
+      let Separator = (typeof configuration.Separator === 'undefined') ? '•' : configuration.Separator;
+      let ExceptionsSeparator = (typeof configuration.ExceptionsSeparator === 'undefined') ? ' ' : configuration.ExceptionsSeparator;
 
 
       let exceptionsMap = new Map();
 
-      let exceptions = configuration.Exceptions;
-
-      for (let n = 0; n < exceptions.length; n++ )
+      if ( typeof configuration.Exceptions !== 'undefined' )
       {
-        let key = exceptions[n].toLowerCase().split(SourceSeparator).join("");
-        let value = exceptions[n].toLowerCase().split(SourceSeparator).join(Separator);
+        let exceptions = configuration.Exceptions;
 
-	exceptionsMap.set(key,value);
+        for (let n = 0; n < exceptions.length; n++ )
+        {
+          let key = exceptions[n].toLowerCase().split(ExceptionsSeparator).join("");
+          let value = exceptions[n].toLowerCase().split(ExceptionsSeparator).join(Separator);
+
+          exceptionsMap.set(key,value);
+        }
       }
 
       let Lines = SourceText.split("\n");
@@ -76,7 +80,7 @@ function convertText(configuration)
 
           let syllableword = exceptionsMap.has(currentWord.toLowerCase()) ? splittoSyllables( currentWord, exceptionsMap.get( currentWord.toLowerCase() ), Separator ) : hyphenator( currentWord ) ;
 
-          let Syllables = syllableword.split(configuration.Separator);
+          let Syllables = syllableword.split(Separator);
 
           let UseFirstColor = true;
 
