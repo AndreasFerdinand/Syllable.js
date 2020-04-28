@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de-DE">
+<head>
+  <title>Syllables</title>
+
+  <meta charset="utf-8"/>
+
+</head>
+<body>
+
+  <div class="container">
+    <p id="source">I love to play soccer. American football is nice.</p>
+    <p><button type="button" id="convert">Convert</button></p>
+    <p id="target"></p>
+  </div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+
+<script>
+var Separator = "•";
+
+var Hyphenopoly = {
+  "require": {
+    "en-us": "FORCEHYPHENOPOLY"
+  },
+  "setup": {
+    "exceptions": { "global" : ""},
+    "selectors": {
+      ".hyphenate": {
+        "hyphen": Separator,
+        "minWordLength": 3
+      }
+    }
+  }
+}
+</script>
+<script src="./Hyphenopoly_Loader.js"></script>
+<script src="./syllables.js"></script>
+<script>
+
+$(document).ready(function(){
+
+  $("#convert").click(function(){
+
+    Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
+
+      let SyllableConfig = {
+        //Separator: Separator,
+        //ExceptionsSeparator: " ",
+        SourceText : $("#source").text(),
+        //FirstColor : "blue",
+        //SecondColor : "red",
+        //Exceptions : [ "V i e l", "s p a s s", "d a m i t" ],
+        hyphenator : hyphenator
+      };
+
+      let SyllableText = convertText( SyllableConfig );
+
+      $("#target").append(SyllableText);
+
+    });
+  });
+});
+
+</script>
+
+</body>
+</html>

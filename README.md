@@ -1,6 +1,18 @@
 # Syllable.js
 This project was created during the [coronavirus pandemic](https://en.wikipedia.org/wiki/2019%E2%80%9320_coronavirus_pandemic) when schools were closed. The aim of the project was the creation of a new web application where children can enhance their reading skills using the Syllable-Method.
 
+So what can you actually do with Syllable.js? You can colorize the syllables of words:
+
+The following text
+```
+I love to play soccer. American football is nice.
+```
+transforms to
+
+![colorized english text](./img/example_en.png)
+
+It works for german texts too. It even works for all languages which are supported by [Hyphenopoly](https://github.com/mnater/Hyphenopoly).
+
 ## Install
 Download the latest release of [Hyphenopoly](https://github.com/mnater/Hyphenopoly). You need the follwoing files/directories:
 
