@@ -49,7 +49,7 @@ var Hyphenopoly = {
 
 Then you can use Syllable.js:
 ```HTML
-<script src="./syllables.js"></script>
+<script src="./Syllable.js"></script>
 <script>
 ...
     Hyphenopoly.hyphenators["en"].then((hyphenator) => {
