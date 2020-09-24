@@ -106,5 +106,10 @@ function convertText(configuration)
         TargetText = TargetText + "<br/>";
       }
 
+      if (SourceText.slice(-1) !== "\n" && TargetText.slice(-5) === "<br/>")
+      {
+        TargetText = TargetText.slice(0,-5);
+      }
+
   return TargetText;
 }
