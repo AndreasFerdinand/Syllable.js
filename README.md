@@ -31,7 +31,7 @@ var Separator = "•";
 
 var Hyphenopoly = {
   "require": {
-    "de": "FORCEHYPHENOPOLY"
+    "en": "FORCEHYPHENOPOLY"
   },
   "setup": {
     "exceptions": { "global" : ""},
