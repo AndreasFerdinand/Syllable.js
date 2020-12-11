@@ -57,7 +57,7 @@ function convertText(configuration)
         }
       }
 
-      let Lines = SourceText.split("\n");
+      let Lines = SourceText.split(/\r\n|\r|\n/g);
 
       for (let n = 0; n < Lines.length; n++ )
       {
