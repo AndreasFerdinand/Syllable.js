@@ -16,7 +16,6 @@ It works for german texts too. It even works for all languages which are support
 ## Install
 Download the latest release of [Hyphenopoly](https://github.com/mnater/Hyphenopoly). You need the follwoing files/directories:
 
-* hyphenopoly.module.js
 * Hyphenopoly.js
 * Hyphenopoly_Loader.js
 * patterns/LANGUAGE.wasm
@@ -26,25 +25,25 @@ Replace LANGUAGE with the language you actually need. Additionally you need the 
 ## Usage
 First you have to load and initialize Hyphenopoly.
 ```HTML
+<script src="./Hyphenopoly_Loader.js"></script>
 <script>
-var Separator = "•";
-
-var Hyphenopoly = {
-  "require": {
-    "en": "FORCEHYPHENOPOLY"
-  },
-  "setup": {
-    "exceptions": { "global" : ""},
-    "selectors": {
-      ".hyphenate": {
-        "hyphen": Separator,
-        "minWordLength": 3
+  var Separator = "•";
+  
+  Hyphenopoly.config({
+    "require": {
+      "en-us": "FORCEHYPHENOPOLY"
+    },
+    "setup": {
+      "exceptions": { "global" : ""},
+      "selectors": {
+        ".hyphenate": {
+          "hyphen": Separator,
+          "minWordLength": 3
+        }
       }
     }
-  }
-}
+  });
 </script>
-<script src="./Hyphenopoly_Loader.js"></script>
 ```
 
 Then you can use Syllable.js:
@@ -52,7 +51,7 @@ Then you can use Syllable.js:
 <script src="./Syllable.js"></script>
 <script>
 ...
-    Hyphenopoly.hyphenators["en"].then((hyphenator) => {
+    Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
 
       let SyllableConfig = {
         Separator: Separator,
