@@ -1,20 +1,23 @@
-var SyllableConverter = function( hyphenator, exceptions = [], hyphenatorSeparator = '•', exceptionSeparator = ' ', textDecorator = this ) {
+var SyllableConverter = function( configuration ) {
 
-	const TextSplitterRegex = /(?<Word>[\wüäöÜÄÖß]+)|(?<Other>\s|[^\wüäöÜÄÖß]+)/g;
-	var m_hyphenator = hyphenator;
-	var m_hyphenatorSeparator = hyphenatorSeparator;
-	var m_exceptionSeparator = exceptionSeparator;
-	var m_textDecorator = textDecorator;
+	const defaultTextSplitterRegex = /(?<Word>[\wüäöÜÄÖß]+)|(?<Other>\s|[^\wüäöÜÄÖß]+)/g;
+	
+	var m_hyphenator = configuration.hyphenator;
+	var m_hyphenatorSeparator = configuration.hyphenatorSeparator ? configuration.hyphenatorSeparator : '•';
+	var m_exceptionSeparator = configuration.exceptionSeparator ? configuration.exceptionSeparator : ' ';
+	var m_textDecorator = configuration.textDecorator ? configuration.textDecorator : this;
+	var m_textSplitterRegex = configuration.textSplitterRegex ? configuration.textSplitterRegex : defaultTextSplitterRegex;
+
+	var m_syllableColors = configuration.syllableColors ? configuration.syllableColors : [ "blue", "red" ];
+	var m_otherColor = configuration.otherColor ? configuration.otherColor : "black";
+
 	var m_wordCount = 0;
-
-	var m_syllableColors = [ "blue", "red" ];
-	var m_otherColor = "black";
 
 	var m_exceptionsMap = new Map();
 
-	if ( typeof exceptions !== 'undefined' ) {
+	if ( typeof configuration.exceptions !== 'undefined' ) {
 
-		exceptions.forEach( (exception) => {
+		configuration.exceptions.forEach( (exception) => {
 			let key = exception.toLowerCase().split(m_exceptionSeparator).join("");
 			let value = exception.toLowerCase().split(m_exceptionSeparator).join(m_hyphenatorSeparator);
 			
@@ -59,7 +62,16 @@ var SyllableConverter = function( hyphenator, exceptions = [], hyphenatorSeparat
 	};
 	
 	this.decorateOther = function( other ) {
-		return'<font color="' + m_otherColor + '">' + other + '</font>';
+		pattern = /[\n\r\s]+/;
+
+		if (pattern.test(other))
+		{
+			return other;
+		}
+		else
+		{
+			return'<font color="' + m_otherColor + '">' + other + '</font>';
+		}
 	};
 	
 	this.setSyllableColors = function( colors = [ "red", "blue" ] ) {
@@ -71,7 +83,7 @@ var SyllableConverter = function( hyphenator, exceptions = [], hyphenatorSeparat
 		let htmlChunk = "";
 		m_wordCount = 0;
 		
-		for (const match of text.matchAll(TextSplitterRegex)) {
+		for (const match of text.matchAll(m_textSplitterRegex)) {
 			if ( typeof match.groups.Word !== 'undefined' ) {
 				
 				let currentWord = match.groups.Word;

@@ -12,7 +12,7 @@
     <p id="source" style="white-space: pre;">
 Click the button to colorize the syllables of this text.
 Special thanks to all supporters of the project. Have fun with it.
-Football
+
 Your Developers
     </p>
     <p><button type="button" id="convert">Convert</button></p>
@@ -46,7 +46,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
 
-      let syllableConverter = new SyllableConverter(hyphenator,[ "Y o u r", "D e v e l o p e r s" ]);
+      let syllableConverter = new SyllableConverter(
+        {
+          hyphenator : hyphenator,
+          exceptions : [ "Y o u r", "D e v e l o p e r s" ]
+        }
+      );
 
       let convertedText = syllableConverter.convertText( document.getElementById("source").innerText );
   

@@ -58,7 +58,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
       let sourceText = "I love to play soccer. American football is nice.";
 
-      let syllableConverter = new SyllableConverter(hyphenator);
+      let syllableConverter = new SyllableConverter(
+        {
+          hyphenator : hyphenator
+        }
+      );
 
       let convertedText = syllableConverter.convertText( sourceText );
     });
@@ -78,28 +82,64 @@ let convertedText = syllableConverter.convertText( "This is a text about Unicorn
 let wordCount = syllableConverter.getWordCount();
 ```
 
-#### Changing Font Color
-If you like to change the default output colors of the syllables the method `setSyllableColors` can be used.
+#### Changing Colors
+To change the default colors for the syllables, the attribute `syllableColors` of the configuration object can be used:
 
 ```js
-let syllableConverter = new SyllableConverter(hyphenator);
+let syllableConverter = new SyllableConverter(
+  {
+    hyphenator : hyphenator,
+    syllableColors: ["green","yellow"],
+  }
+);
+```
+
+Additionally the method `setSyllableColors` can be used.
+
+```js
+let syllableConverter = new SyllableConverter(
+  {
+    hyphenator : hyphenator
+  }
+);
 
 syllableConverter.setSyllableColors(["#005996","#96000e"]);
 ```
 
 It's even possible to use more than 2 colors. Just try it out.
 
-#### Exceptions
-Since nobody (or no software) is perfect, it can happen, that the syllabification isn't correct. If so you can define exceptions to overcome the default behavior of syllable.js. Exceptions can be passed using arrays at the createion of the converter object (second parameter). Than words will be splitted at space character into syllables.
+To change the colors of all other characters the attribute `otherColor` can be used:
 
 ```js
-let syllableConverter = new SyllableConverter(hyphenator,["F o o t b a l l"],undefined,undefined,customConverter);
+let syllableConverter = new SyllableConverter(
+  {
+    hyphenator : hyphenator,
+    otherColor : 'yellow'
+  }
+);
+
+#### Exceptions
+Since nobody (or no software) is perfect, it can happen, that the syllabification is not correct. If so you can define exceptions to overcome the default behavior of syllable.js. Exceptions can be passed using `exceptions` attibute as arrays at the createion of the converter object. Than words will be splitted at space character into syllables.
+
+```js
+let syllableConverter = new SyllableConverter(
+  {
+    hyphenator : hyphenator,
+    exceptions : [ "F o o t b a l l" ]
+  }
+);
 ```
 
-A different exception separator is supported to, just pass it to the fourth parameter:
+A different exception separator is supported too, just set the `exceptionSeparator` attribute:
 
 ```js
-let syllableConverter = new SyllableConverter(hyphenator,["F-o-o-t-b-a-l-l"],undefined,"-",customConverter);
+let syllableConverter = new SyllableConverter(
+  {
+    hyphenator : hyphenator,
+    exceptions : ["F-o-o-t-b-a-l-l"],
+    exceptionSeparator : '-'
+  }
+);
 ```
 
 #### Changing html Output
@@ -142,7 +182,12 @@ The following code shows how a custom converter can be used. A complete example 
 
     Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
 
-      let syllableConverter = new SyllableConverter(hyphenator,[],undefined,undefined,customConverter);
+    let syllableConverter = new SyllableConverter(
+      {
+        hyphenator : hyphenator,
+        textDecorator : customConverter
+      }
+    );
 
       let convertedText = syllableConverter.convertText( "Football" );
     });

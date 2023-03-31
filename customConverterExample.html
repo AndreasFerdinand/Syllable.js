@@ -62,7 +62,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
 
-      let syllableConverter = new SyllableConverter(hyphenator,[],undefined,undefined,customConverter);
+      //let syllableConverter = new SyllableConverter(hyphenator,[],undefined,undefined,customConverter);
+
+      let syllableConverter = new SyllableConverter(
+        {
+          hyphenator : hyphenator,
+          textDecorator : customConverter
+        }
+      );
 
       let convertedText = syllableConverter.convertText( document.getElementById("source").innerText );
   

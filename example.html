@@ -47,7 +47,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     Hyphenopoly.hyphenators["de"].then((hyphenator) => {
 
-      let syllableConverter = new SyllableConverter(hyphenator,[ "E u r e", "E n t w i c k l e r" ]);
+      let syllableConverter = new SyllableConverter(
+        {
+          hyphenator : hyphenator,
+          exceptions : [ "E u r e", "E n t w i c k l e r" ],
+        }
+      );
 
       let convertedText = syllableConverter.convertText( document.getElementById("source").innerText );
   
