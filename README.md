@@ -161,7 +161,7 @@ If words and non-word characters are not separated correct, than the default reg
 /(?<Word>[\wüäöÜÄÖß]+)|(?<Other>\s|[^\wüäöÜÄÖß]+)/g
 ```
 
-The regular expression can be changed using attribute `textSplitterRegex`. By default, the name 'Lucía' is not captured as a single word, but as to words, separated by the `í` character which will be shown black. To handle the the `í` correct change the regular expressen as shown below.
+The regular expression can be changed using attribute `textSplitterRegex`. By default, the name 'Lucía' is not captured as a single word, but as two words, separated by the `í` character which will be shown black. To handle the the `í` correct change the regular expressen as shown below.
 
 ```js
 let syllableConverter = new SyllableConverter(
