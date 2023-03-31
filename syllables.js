@@ -1,6 +1,7 @@
 var SyllableConverter = function( configuration ) {
 
-	const defaultTextSplitterRegex = /(?<Word>[\wüäöÜÄÖß]+)|(?<Other>\s|[^\wüäöÜÄÖß]+)/g;
+	const defaultTextSplitterRegex = /(?<Word>[\wüäöÜÄÖßẞ]+)|(?<Other>\s|[^\wüäöÜÄÖßẞ]+)/g;
+
 	
 	var m_hyphenator = configuration.hyphenator;
 	var m_hyphenatorSeparator = configuration.hyphenatorSeparator ? configuration.hyphenatorSeparator : '•';
