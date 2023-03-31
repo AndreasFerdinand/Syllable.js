@@ -9,12 +9,15 @@
 <body>
 
   <div class="container">
-    <p id="source">I love to play soccer. American football is nice.</p>
+    <p id="source" style="white-space: pre;">
+Click the button to colorize the syllables of this text.
+Special thanks to all supporters of the project. Have fun with it.
+Football
+Your Developers
+    </p>
     <p><button type="button" id="convert">Convert</button></p>
-    <p id="target"></p>
+    <p id="target" style="white-space: pre;"></p>
   </div>
-
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 
 <script src="./Hyphenopoly_Loader.js"></script>
 <script>
@@ -37,32 +40,23 @@
 </script>
 <script src="./syllables.js"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
 
-$(document).ready(function(){
-
-  $("#convert").click(function(){
+  document.getElementById("convert").addEventListener("click",function(){
 
     Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
 
-      let SyllableConfig = {
-        //Separator: Separator,
-        //ExceptionsSeparator: " ",
-        SourceText : $("#source").text(),
-        //FirstColor : "blue",
-        //SecondColor : "red",
-        //Exceptions : [ "V i e l", "s p a s s", "d a m i t" ],
-        hyphenator : hyphenator
-      };
+      let syllableConverter = new SyllableConverter(hyphenator,[ "Y o u r", "D e v e l o p e r s" ]);
 
-      let SyllableText = convertText( SyllableConfig );
-
-      $("#target").append(SyllableText);
+      let convertedText = syllableConverter.convertText( document.getElementById("source").innerText );
+  
+      document.getElementById("target").innerHTML = convertedText;
 
     });
   });
-});
-
+}); 
 </script>
 
 </body>
 </html>
+

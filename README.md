@@ -16,18 +16,18 @@ It works for german texts too. It even works for all languages which are support
 ## Install
 Download the latest release of [Hyphenopoly](https://github.com/mnater/Hyphenopoly). You need the follwoing files/directories:
 
-* Hyphenopoly.js
-* Hyphenopoly_Loader.js
-* patterns/LANGUAGE.wasm
+* `Hyphenopoly.js`
+* `Hyphenopoly_Loader.js`
+* `patterns/<LANGUAGE>.wasm`
 
-Replace LANGUAGE with the language you actually need. Additionally you need the latest release of Syllable.js.
+Replace `<LANGUAGE>` with the language you actually need. Additionally you need the latest release of Syllable.js.
 
 ## Usage
+### Simple Example
 First you have to load and initialize Hyphenopoly.
 ```HTML
 <script src="./Hyphenopoly_Loader.js"></script>
 <script>
-  var Separator = "•";
   
   Hyphenopoly.config({
     "require": {
@@ -37,7 +37,7 @@ First you have to load and initialize Hyphenopoly.
       "exceptions": { "global" : ""},
       "selectors": {
         ".hyphenate": {
-          "hyphen": Separator,
+          "hyphen": "•",
           "minWordLength": 3
         }
       }
@@ -48,28 +48,108 @@ First you have to load and initialize Hyphenopoly.
 
 Then you can use Syllable.js:
 ```HTML
-<script src="./Syllable.js"></script>
+<script src="./syllables.js"></script>
 <script>
-...
+document.addEventListener('DOMContentLoaded', function() {
+
+  document.getElementById("convert").addEventListener("click",function(){
+
     Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
 
-      let SyllableConfig = {
-        Separator: Separator,
-        ExceptionsSeparator: " ",
-        SourceText : "Some Source Text",
-        FirstColor : "blue",
-        SecondColor : "red",
-        Exceptions : [ "S o m e" ],
-        hyphenator : hyphenator
-      };
+      let sourceText = "I love to play soccer. American football is nice.";
 
-      let SyllableText = convertText( SyllableConfig );
+      let syllableConverter = new SyllableConverter(hyphenator);
 
+      let convertedText = syllableConverter.convertText( sourceText );
     });
-...
+  });
+}); 
 </script>
 ```
-At least the follwoing attributes of the configuration must be set:
 
-* SourceText
-* hyphenator
+### Further Examples
+
+#### Word Count
+After converting a text to syllables the processed word count could be retrieved using function `getWordCount`:
+
+```js
+let convertedText = syllableConverter.convertText( "This is a text about Unicorns" );
+
+let wordCount = syllableConverter.getWordCount();
+```
+
+#### Changing Font Color
+If you like to change the default output colors of the syllables the method `setSyllableColors` can be used.
+
+```js
+let syllableConverter = new SyllableConverter(hyphenator);
+
+syllableConverter.setSyllableColors(["#005996","#96000e"]);
+```
+
+It's even possible to use more than 2 colors. Just try it out.
+
+#### Exceptions
+Since nobody (or no software) is perfect, it can happen, that the syllabification isn't correct. If so you can define exceptions to overcome the default behavior of syllable.js. Exceptions can be passed using arrays at the createion of the converter object (second parameter). Than words will be splitted at space character into syllables.
+
+```js
+let syllableConverter = new SyllableConverter(hyphenator,["F o o t b a l l"],undefined,undefined,customConverter);
+```
+
+A different exception separator is supported to, just pass it to the fourth parameter:
+
+```js
+let syllableConverter = new SyllableConverter(hyphenator,["F-o-o-t-b-a-l-l"],undefined,"-",customConverter);
+```
+
+#### Changing html Output
+By default Syllable.js splits the words in syllables and wraps them into `<font>` tags using a `color` attribute to set the display color. The reason, why styling is done using attributes and not using stylesheets is, that the stylesheet color is lost by some browsers on copy & paste. For example the word 'football' is transformed to the following code:
+
+```html
+<font color="blue">Foot</font><font color="red">ball</font>
+```
+
+If you need to change the resulting html, need to capture the processed words or something else, a handler object must be implemented and passed to the converter. At least the two functions must be implemented.
+
+* `decorateWord` - Function to style the syllables of words.
+* `decorateOther` - Function to style all other characters, including line breaks and spaces.
+
+The following code shows how a custom converter can be used. A complete example implementation can be found in [customConverterExample.html](customConverterExample.html).
+
+```js
+  CustomConverter = function() {
+    this.decorateWord = function( primarilyWord, syllables ) {
+      let syllableCount = 0;
+ 	    let htmlChunk = "";
+		
+      syllables.forEach( (syllable) => {
+	       htmlChunk += ( syllableCount % 2 === 0 ) ? "<i>" + syllable + "</i>" : "<b>" + syllable + "</b>"
+			
+	      syllableCount++;
+ 	    });
+		
+      return htmlChunk;
+    };
+
+    this.decorateOther = function( other ) {
+      return other;
+    };
+  };
+
+  var customConverter = new CustomConverter( );
+
+  document.getElementById("convert").addEventListener("click",function(){
+
+    Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
+
+      let syllableConverter = new SyllableConverter(hyphenator,[],undefined,undefined,customConverter);
+
+      let convertedText = syllableConverter.convertText( "Football" );
+    });
+  });
+</script>
+```
+
+Using the custom converter the output could be transformed to:
+
+![Custom Converter Example Output](img/customConverterExample.png)

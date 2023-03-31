@@ -9,12 +9,7 @@
 <body>
 
   <div class="container">
-    <p id="source" style="white-space: pre;">
-Drücke auf den Knopf und dieser Text wird in Silbenschrift umgewandelt.
-Herzlichen Dank an alle Unterstützer und viel Spaß mit der Software.
-
-Eure Entwickler
-    </p>
+    <p id="source" style="white-space: pre;">Football</p>
     <p><button type="button" id="convert">Convert</button></p>
     <p id="target" style="white-space: pre;"></p>
   </div>
@@ -25,7 +20,7 @@ Eure Entwickler
   
   Hyphenopoly.config({
     "require": {
-      "de": "FORCEHYPHENOPOLY"
+      "en-us": "FORCEHYPHENOPOLY"
     },
     "setup": {
       "exceptions": { "global" : ""},
@@ -40,14 +35,34 @@ Eure Entwickler
 </script>
 <script src="./syllables.js"></script>
 <script>
-
 document.addEventListener('DOMContentLoaded', function() {
+
+  CustomConverter = function() {
+    this.decorateWord = function( primarilyWord, syllables ) {
+      let syllableCount = 0;
+ 	    let htmlChunk = "";
+		
+      syllables.forEach( (syllable) => {
+	       htmlChunk += ( syllableCount % 2 === 0 ) ? "<i>" + syllable + "</i>" : "<b>" + syllable + "</b>"
+			
+	      syllableCount++;
+ 	    });
+		
+      return htmlChunk;
+    };
+
+    this.decorateOther = function( other ) {
+      return other;
+    };
+  };
+
+  var customConverter = new CustomConverter( );
 
   document.getElementById("convert").addEventListener("click",function(){
 
-    Hyphenopoly.hyphenators["de"].then((hyphenator) => {
+    Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
 
-      let syllableConverter = new SyllableConverter(hyphenator,[ "E u r e", "E n t w i c k l e r" ]);
+      let syllableConverter = new SyllableConverter(hyphenator,[],undefined,undefined,customConverter);
 
       let convertedText = syllableConverter.convertText( document.getElementById("source").innerText );
   
@@ -56,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 }); 
-
 </script>
 
 </body>
