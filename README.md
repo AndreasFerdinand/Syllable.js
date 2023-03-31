@@ -154,7 +154,7 @@ let syllableConverter = new SyllableConverter(
 );
 ```
 
-#### Word Separation dosn't work
+#### Word Separation doesn't work
 If words and non-word characters are not separated correct, than the default regular expresson doesn't meet your requirements. The default regex is:
 
 ```
