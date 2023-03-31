@@ -142,6 +142,38 @@ let syllableConverter = new SyllableConverter(
 );
 ```
 
+#### Different Hyphen-Character of Hyphenopoly
+If another character than `•` is used as hyphen-character for Hyphenopoly than this character musst be passed to the `SyllableConverter` object:
+
+```js
+let syllableConverter = new SyllableConverter(
+  {
+    hyphenator : hyphenator,
+    hyphenatorSeparator : '~'
+  }
+);
+```
+
+#### Word Separation dosn't work
+If words and non-word characters are not separated correct, than the default regular expresson doesn't meet your requirements. The default regex is:
+
+```
+/(?<Word>[\wüäöÜÄÖß]+)|(?<Other>\s|[^\wüäöÜÄÖß]+)/g
+```
+
+The regular expression can be changed using attribute `textSplitterRegex`. By default, the name 'Lucía' is not captured as a single word, but as to words, separated by the `í` character which will be shown black. To handle the the `í` correct change the regular expressen as shown below.
+
+```js
+let syllableConverter = new SyllableConverter(
+  {
+    hyphenator : hyphenator,
+    textSplitterRegex : /(?<Word>[\wüäöÜÄÖßí]+)|(?<Other>\s|[^\wüäöÜÄÖßí]+)/g
+  }
+);
+```
+
+Keep in mind, that regular expression must contain at least the named capturing groups `Word` and `Other`.
+
 #### Changing html Output
 By default Syllable.js splits the words in syllables and wraps them into `<font>` tags using a `color` attribute to set the display color. The reason, why styling is done using attributes and not using stylesheets is, that the stylesheet color is lost by some browsers on copy & paste. For example the word 'football' is transformed to the following code:
 
@@ -157,42 +189,35 @@ If you need to change the resulting html, need to capture the processed words or
 The following code shows how a custom converter can be used. A complete example implementation can be found in [customConverterExample.html](customConverterExample.html).
 
 ```js
-  CustomConverter = function() {
-    this.decorateWord = function( primarilyWord, syllables ) {
-      let syllableCount = 0;
- 	    let htmlChunk = "";
+CustomConverter = function() {
+  this.decorateWord = function( primarilyWord, syllables ) {
+    let syllableCount = 0;
+    let htmlChunk = "";
+	
+    syllables.forEach( (syllable) => {
+       htmlChunk += ( syllableCount % 2 === 0 ) ? "<i>" + syllable + "</i>" : "<b>" + syllable + "</b>"
 		
-      syllables.forEach( (syllable) => {
-	       htmlChunk += ( syllableCount % 2 === 0 ) ? "<i>" + syllable + "</i>" : "<b>" + syllable + "</b>"
-			
-	      syllableCount++;
- 	    });
-		
-      return htmlChunk;
-    };
-
-    this.decorateOther = function( other ) {
-      return other;
-    };
-  };
-
-  var customConverter = new CustomConverter( );
-
-  document.getElementById("convert").addEventListener("click",function(){
-
-    Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
-
-    let syllableConverter = new SyllableConverter(
-      {
-        hyphenator : hyphenator,
-        textDecorator : customConverter
-      }
-    );
-
-      let convertedText = syllableConverter.convertText( "Football" );
+      syllableCount++;
     });
+	
+    return htmlChunk;
+  };
+  this.decorateOther = function( other ) {
+    return other;
+  };
+};
+var customConverter = new CustomConverter( );
+document.getElementById("convert").addEventListener("click",function(){
+  Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
+  let syllableConverter = new SyllableConverter(
+    {
+      hyphenator : hyphenator,
+      textDecorator : customConverter
+    }
+  );
+    let convertedText = syllableConverter.convertText( "Football" );
   });
-</script>
+});
 ```
 
 Using the custom converter the output could be transformed to:
