@@ -16,17 +16,7 @@ var SyllableConverter = function( configuration ) {
 
 	var m_exceptionsMap = new Map();
 
-	if ( typeof configuration.exceptions !== 'undefined' ) {
-
-		configuration.exceptions.forEach( (exception) => {
-			let key = exception.toLowerCase().split(m_exceptionSeparator).join("");
-			let value = exception.toLowerCase().split(m_exceptionSeparator).join(m_hyphenatorSeparator);
-			
-			m_exceptionsMap.set(key,value);
-		});
-	}
-
-
+	
 	separateSyllables = function(wordToSplit) {
  
 		let syllableword = "";
@@ -47,6 +37,18 @@ var SyllableConverter = function( configuration ) {
 		return syllableword;
 	};
 
+
+	this.setExceptions = function( exceptions ) {
+
+		m_exceptionsMap.clear();
+
+		exceptions.forEach( (exception) => {
+			let key = exception.toLowerCase().split(m_exceptionSeparator).join("");
+			let value = exception.toLowerCase().split(m_exceptionSeparator).join(m_hyphenatorSeparator);
+			
+			m_exceptionsMap.set(key,value);
+		});
+	};
 
 	this.decorateWord = function( primarilyWord, syllables ) {
 		
@@ -113,4 +115,6 @@ var SyllableConverter = function( configuration ) {
 	this.getWordCount = function( ) {
 		return m_wordCount;
 	};
+
+	this.setExceptions( configuration.exceptions ? configuration.exceptions : [] );
 };

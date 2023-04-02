@@ -128,6 +128,18 @@ let syllableConverter = new SyllableConverter(
 );
 ```
 
+If exceptions must be changed or set after object creation, the method `setExceptions` can be used.
+
+```js
+let syllableConverter = new SyllableConverter(
+  {
+    hyphenator : hyphenator
+  }
+);
+
+syllableConverter.setExceptions(["F o o t b a l l"]);
+```
+
 A different exception separator is supported too, just set the `exceptionSeparator` attribute:
 
 ```js
