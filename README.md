@@ -117,7 +117,7 @@ let syllableConverter = new SyllableConverter(
 ```
 
 #### Exceptions
-Since nobody (or no software) is perfect, it can happen, that the syllabification is not correct. If so you can define exceptions to overcome the default behavior of syllable.js. Exceptions can be passed using `exceptions` attibute as arrays at the createion of the converter object. Than words will be splitted at space character into syllables.
+Since nobody (or no software) is perfect, it can happen, that the syllabification is not correct. If so you can define exceptions to overcome the default behavior of syllable.js. Exceptions can be passed using `exceptions` attibute during creation of the converter object. Than words will be splitted at space character into syllables.
 
 ```js
 let syllableConverter = new SyllableConverter(
@@ -164,7 +164,7 @@ let syllableConverter = new SyllableConverter(
 );
 ```
 
-#### Word Separation doesn't work
+#### Word Separation incorrect
 If words and non-word characters are not separated correct, than the default regular expresson doesn't meet your requirements. The default regex is:
 
 ```
