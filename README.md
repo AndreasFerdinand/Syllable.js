@@ -13,7 +13,7 @@ transforms to
 
 It works for german texts too. It even works for all languages which are supported by [Hyphenopoly](https://github.com/mnater/Hyphenopoly).
 
-## Install
+## Installation
 Download the latest release of [Hyphenopoly](https://github.com/mnater/Hyphenopoly). You need the follwoing files/directories:
 
 * `Hyphenopoly.js`
@@ -52,20 +52,17 @@ Then you can use Syllable.js:
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-  document.getElementById("convert").addEventListener("click",function(){
+  Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
 
-    Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
+    let sourceText = "I love to play soccer. American football is nice.";
 
-      let sourceText = "I love to play soccer. American football is nice.";
+    let syllableConverter = new SyllableConverter(
+      {
+        hyphenator : hyphenator
+      }
+    );
 
-      let syllableConverter = new SyllableConverter(
-        {
-          hyphenator : hyphenator
-        }
-      );
-
-      let convertedText = syllableConverter.convertText( sourceText );
-    });
+    let convertedText = syllableConverter.convertText( sourceText );
   });
 }); 
 </script>
@@ -144,7 +141,7 @@ let syllableConverter = new SyllableConverter(
 ```
 
 #### Different Hyphen-Character of Hyphenopoly
-If another character than `•` is used as hyphen-character for Hyphenopoly than this character musst be passed to the `SyllableConverter` object:
+If another character than `•` is used as hyphen-character for Hyphenopoly than this character musst be passed to the `SyllableConverter`:
 
 ```js
 let syllableConverter = new SyllableConverter(
@@ -159,10 +156,10 @@ let syllableConverter = new SyllableConverter(
 If words and non-word characters are not separated correct, than the default regular expresson doesn't meet your requirements. The default regex is:
 
 ```
-/(?<Word>[\wüäöÜÄÖß]+)|(?<Other>\s|[^\wüäöÜÄÖß]+)/g
+/(?<Word>[\wüäöÜÄÖßẞ]+)|(?<Other>\s|[^\wüäöÜÄÖßẞ]+)/g
 ```
 
-The regular expression can be changed using attribute `textSplitterRegex`. By default, the name 'Lucía' is not captured as a single word, but as two words, separated by the `í` character which will be shown black. To handle the the `í` correct change the regular expressen as shown below.
+The regular expression can be changed using attribute `textSplitterRegex`. By default, the name 'Lucía' is not captured as a single word, but as two words, separated by the `í` character which will be shown black. To handle the `í` correct change the regular expressen as shown below.
 
 ```js
 let syllableConverter = new SyllableConverter(
@@ -182,7 +179,7 @@ By default Syllable.js splits the words in syllables and wraps them into `<font>
 <font color="blue">Foot</font><font color="red">ball</font>
 ```
 
-If you need to change the resulting html, need to capture the processed words or something else, a handler object must be implemented and passed to the converter. At least the two functions must be implemented.
+If you need to change the resulting html, need to capture the processed words or something else, a handler object must be implemented and passed to the converter. At least the two functions must be implemented by this handler object.
 
 * `decorateWord` - Function to style the syllables of words.
 * `decorateOther` - Function to style all other characters, including line breaks and spaces.
