@@ -167,7 +167,7 @@ let syllableConverter = new SyllableConverter(
 #### Word Separation incorrect
 If words and non-word characters are not separated correct, than the default regular expresson doesn't meet your requirements. The default regex is:
 
-```
+```js
 /(?<Word>[\wüäöÜÄÖßẞ]+)|(?<Other>\s|[^\wüäöÜÄÖßẞ]+)/g
 ```
 
@@ -177,7 +177,7 @@ The regular expression can be changed using attribute `textSplitterRegex`. By de
 let syllableConverter = new SyllableConverter(
   {
     hyphenator : hyphenator,
-    textSplitterRegex : /(?<Word>[\wüäöÜÄÖßí]+)|(?<Other>\s|[^\wüäöÜÄÖßí]+)/g
+    textSplitterRegex : /(?<Word>[\wüäöÜÄÖßẞí]+)|(?<Other>\s|[^\wüäöÜÄÖßẞí]+)/g
   }
 );
 ```
@@ -216,7 +216,9 @@ CustomConverter = function() {
     return other;
   };
 };
+
 var customConverter = new CustomConverter( );
+
 document.getElementById("convert").addEventListener("click",function(){
   Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
   let syllableConverter = new SyllableConverter(
