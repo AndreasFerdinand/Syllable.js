@@ -16,7 +16,7 @@ var SyllableConverter = function( configuration ) {
 
 	var m_exceptionsMap = new Map();
 
-	
+
 	separateSyllables = function(wordToSplit) {
  
 		let syllableword = "";
@@ -80,6 +80,10 @@ var SyllableConverter = function( configuration ) {
 	this.setSyllableColors = function( colors = [ "red", "blue" ] ) {
 		m_syllableColors = colors;
 	};
+
+	this.setOtherColor = function( color ) {
+		m_otherColor = color;
+	}
 
 	this.convertText = function( text ) {
 		
