@@ -11,7 +11,12 @@ transforms to
 
 ![colorized english text](./img/example_en.png)
 
-It works for german texts too. It even works for all languages which are supported by [Hyphenopoly](https://github.com/mnater/Hyphenopoly).
+It works for german texts too:
+
+![colorized german text](./img/example_de.png)
+
+ It even works for all languages which are supported by [Hyphenopoly](https://github.com/mnater/Hyphenopoly).
+
 
 ## Installation
 Download the latest release of [Hyphenopoly](https://github.com/mnater/Hyphenopoly). You need the follwoing files/directories:
