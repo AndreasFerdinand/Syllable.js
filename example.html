@@ -9,13 +9,15 @@
 <body>
 
   <div class="container">
-    <p id="source">Dieser Text wird in Silbenschrift konvertiert. Viel Spass damit.</p>
+    <p id="source" style="white-space: pre;">
+Drücke auf den Knopf und dieser Text wird in Silbenschrift umgewandelt.
+Herzlichen Dank an alle Unterstützer und viel Spaß mit der Software.
+
+Eure Entwickler
+    </p>
     <p><button type="button" id="convert">Convert</button></p>
-    <p id="target"></p>
+    <p id="target" style="white-space: pre;"></p>
   </div>
-
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-
 
 <script src="./Hyphenopoly_Loader.js"></script>
 <script>
@@ -39,25 +41,22 @@
 <script src="./syllables.js"></script>
 <script>
 
-$(document).ready(function(){
+document.addEventListener('DOMContentLoaded', function() {
 
-  $("#convert").click(function(){
+  document.getElementById("convert").addEventListener("click",function(){
 
     Hyphenopoly.hyphenators["de"].then((hyphenator) => {
 
-      let SyllableConfig = {
-        //Separator: Separator,
-        //ExceptionsSeparator: " ",
-        SourceText : $("#source").text(),
-        //FirstColor : "blue",
-        //SecondColor : "red",
-        Exceptions : [ "V i e l", "s p a s s", "d a m i t" ],
-        hyphenator : hyphenator
-      };	
+      let syllableConverter = new SyllableConverter(
+        {
+          hyphenator : hyphenator,
+          exceptions : [ "E u r e", "E n t w i c k l e r"]
+        }
+      );
+
+      let convertedText = syllableConverter.convertText( document.getElementById("source").innerText );
   
-      let SyllableText = convertText( SyllableConfig );
-  
-      $("#target").append(SyllableText);
+      document.getElementById("target").innerHTML = convertedText;
 
     });
   });

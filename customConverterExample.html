@@ -9,12 +9,7 @@
 <body>
 
   <div class="container">
-    <p id="source" style="white-space: pre;">
-Click the button to colorize the syllables of this text.
-Special thanks to all supporters of the project. Have fun with it.
-
-Your Developers
-    </p>
+    <p id="source" style="white-space: pre;">Football</p>
     <p><button type="button" id="convert">Convert</button></p>
     <p id="target" style="white-space: pre;"></p>
   </div>
@@ -42,14 +37,37 @@ Your Developers
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
+  CustomConverter = function() {
+    this.decorateWord = function( primarilyWord, syllables ) {
+      let syllableCount = 0;
+ 	    let htmlChunk = "";
+		
+      syllables.forEach( (syllable) => {
+	       htmlChunk += ( syllableCount % 2 === 0 ) ? "<i>" + syllable + "</i>" : "<b>" + syllable + "</b>"
+			
+	      syllableCount++;
+ 	    });
+		
+      return htmlChunk;
+    };
+
+    this.decorateOther = function( other ) {
+      return other;
+    };
+  };
+
+  var customConverter = new CustomConverter( );
+
   document.getElementById("convert").addEventListener("click",function(){
 
     Hyphenopoly.hyphenators["en-us"].then((hyphenator) => {
 
+      //let syllableConverter = new SyllableConverter(hyphenator,[],undefined,undefined,customConverter);
+
       let syllableConverter = new SyllableConverter(
         {
           hyphenator : hyphenator,
-          exceptions : [ "Y o u r", "D e v e l o p e r s" ]
+          textDecorator : customConverter
         }
       );
 
