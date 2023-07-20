@@ -24,19 +24,23 @@ Eure Entwickler
   var Separator = "•";
   
   Hyphenopoly.config({
-    "require": {
-      "de": "FORCEHYPHENOPOLY"
-    },
-    "setup": {
-      "exceptions": { "global" : ""},
-      "selectors": {
-        ".hyphenate": {
-          "hyphen": Separator,
-          "minWordLength": 3
+    require: {
+          "de-x-syllable": "FORCEHYPHENOPOLY",
+          "de": "FORCEHYPHENOPOLY"
+      },
+      fallbacks: {
+          "de": "de-x-syllable"
+      },
+    setup: {
+        selectors: {
+            ".hyphenate": {
+                hyphen: "•",
+                minWordLength: 4
+            }
         }
-      }
     }
-  });
+});
+
 </script>
 <script src="./syllables.js"></script>
 <script>

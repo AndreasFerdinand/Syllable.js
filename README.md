@@ -73,7 +73,40 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 ```
 
-### Further Examples
+### German Example
+Since Syllable.js is based on [Hyphenopoly](https://github.com/mnater/Hyphenopoly) and this was created to separate words at the end of lines, the default hyphenation pattern doesn't work, as single letters aren't separeted. Due to this fact, a specific pattern for syllabification was created with release [5.0.1](https://github.com/mnater/Hyphenopoly/releases/tag/v5.0.1). Additional details can be found [here](https://mnater.github.io/Hyphenopoly/Special-use-cases.html#syllabification).
+
+To use the new pattern, [Hyphenopoly](https://github.com/mnater/Hyphenopoly) must be initialized as shown below.
+
+```HTML
+<script src="./Hyphenopoly_Loader.js"></script>
+<script>
+  var Separator = "•";
+  
+  Hyphenopoly.config({
+    require: {
+          "de-x-syllable": "FORCEHYPHENOPOLY",
+          "de": "FORCEHYPHENOPOLY"
+      },
+      fallbacks: {
+          "de": "de-x-syllable"
+      },
+    setup: {
+        selectors: {
+            ".hyphenate": {
+                hyphen: "•",
+                minWordLength: 4
+            }
+        }
+    }
+});
+</script>
+```
+
+The full example can be found in [example.html](example.html).
+
+
+### Further Examples & technical Details
 
 #### Word Count
 After converting a text to syllables the processed word count could be retrieved using function `getWordCount`:
