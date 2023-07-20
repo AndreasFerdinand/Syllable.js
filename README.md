@@ -122,7 +122,7 @@ let syllableConverter = new SyllableConverter(
 ```
 
 #### Exceptions
-Since nobody (or no software) is perfect, it can happen, that the syllabification is not correct. If so you can define exceptions to overcome the default behavior of syllable.js. Exceptions can be passed using `exceptions` attibute during creation of the converter object. Than words will be splitted at space character into syllables.
+Since nobody (or no software) is perfect, it can happen, that the syllabification is not correct. If so you can define exceptions to overcome the default behavior of syllable.js. Exceptions can be passed using `exceptions` attribute during creation of the converter object. Than words will be splitted at space character into syllables.
 
 ```js
 let syllableConverter = new SyllableConverter(
@@ -190,7 +190,7 @@ let syllableConverter = new SyllableConverter(
 Keep in mind, that regular expression must contain at least the named capturing groups `Word` and `Other`.
 
 #### Changing html Output
-By default Syllable.js splits the words in syllables and wraps them into `<font>` tags using a `color` attribute to set the display color. The reason, why styling is done using attributes and not using stylesheets is, that the stylesheet color is lost by some browsers on copy & paste. For example the word 'football' is transformed to the following code:
+By default Syllable.js splits the words in syllables and wraps them into `<font>` tags using a `color` attribute to set the display color. The reason, why styling is done using attributes and not using stylesheets is, that the stylesheet color is lost by some browsers on copy & paste. For example the word 'Football' is transformed to the following code:
 
 ```html
 <font color="blue">Foot</font><font color="red">ball</font>
