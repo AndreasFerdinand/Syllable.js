@@ -17,6 +17,8 @@ It works for german texts too:
 
  It even works for all languages which are supported by [Hyphenopoly](https://github.com/mnater/Hyphenopoly).
 
+## See it in action
+To see how the library works, go to [silbenapp.froeschler.net](https://silbenapp.froeschler.net) :de:.
 
 ## Installation
 Download the latest release of [Hyphenopoly](https://github.com/mnater/Hyphenopoly). You need the follwoing files/directories:
