@@ -12,6 +12,8 @@ var SyllableConverter = function( configuration ) {
 	var m_syllableColors = configuration.syllableColors ? configuration.syllableColors : [ "blue", "red" ];
 	var m_otherColor = configuration.otherColor ? configuration.otherColor : "black";
 
+	var m_styleClassNames = configuration.styleClassNames ? configuration.styleClassNames : ["first_syllable","second_syllable"];
+
 	var m_wordCount = 0;
 
 	var m_exceptionsMap = new Map();
@@ -56,7 +58,10 @@ var SyllableConverter = function( configuration ) {
 		let htmlChunk = "";
 		
 		syllables.forEach( (syllable) => {
-			htmlChunk += '<font color="' + m_syllableColors[ syllableCount % m_syllableColors.length ] + '">' + syllable + '</font>';
+			var fontColor = m_syllableColors[ syllableCount % m_syllableColors.length ];
+			var styleClassName = m_styleClassNames[ syllableCount % m_syllableColors.length ];
+
+			htmlChunk += '<font color="' + fontColor + '" class="' + styleClassName + '">' + syllable + '</font>';
 			
 			syllableCount++;
 		} );
@@ -83,6 +88,10 @@ var SyllableConverter = function( configuration ) {
 
 	this.setOtherColor = function( color ) {
 		m_otherColor = color;
+	}
+
+	this.setstyleClassNames = function( styleClassNames = ["first_syllable","second_syllable"]) {
+		m_styleClassNames = styleClassNames;
 	}
 
 	this.convertText = function( text ) {
