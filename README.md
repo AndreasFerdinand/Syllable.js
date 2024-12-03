@@ -156,6 +156,20 @@ let syllableConverter = new SyllableConverter(
 );
 ```
 
+#### Separators between Syllables
+To add a separator between the syllables use parameter `syllableOutputSeparator` or method `setSyllableOutputSeparator`. The separator can be a simple character or an arbitrary string (even HTML code).
+
+```js
+let syllableConverter = new SyllableConverter(
+  {
+    hyphenator : hyphenator,
+    syllableOutputSeparator : "-"
+  }
+);
+```
+
+See file [exampleSeparator.html](exampleSeparator.html).
+
 #### Exceptions
 Since nobody (or no software) is perfect, it can happen, that the syllabification is not correct. If so you can define exceptions to overcome the default behavior of syllable.js. Exceptions can be passed using `exceptions` attribute during creation of the converter object. Than words will be splitted at space character into syllables.
 

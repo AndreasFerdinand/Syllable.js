@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de-DE">
+<head>
+  <title>Syllables</title>
+
+  <meta charset="utf-8"/>
+
+</head>
+<body>
+
+  <div class="container">
+    <p id="source" style="white-space: pre;">
+Wenn du auf den Knopf drückst, dann wird zwischen den Silben der Wörter ein Bindestrich eingefügt. Damit du das besser sehen kannst probieren wir was bei Donaudampfschiffahrtsgesellschaft heraus kommt.
+
+Eure Entwickler
+    </p>
+    <p><button type="button" id="convert">Convert</button></p>
+    <p id="target" style="white-space: pre;"></p>
+  </div>
+
+<script src="./Hyphenopoly_Loader.js"></script>
+<script>
+  var Separator = "•";
+  
+  Hyphenopoly.config({
+    require: {
+          "de-x-syllable": "FORCEHYPHENOPOLY",
+          "de": "FORCEHYPHENOPOLY"
+      },
+      fallbacks: {
+          "de": "de-x-syllable"
+      },
+    setup: {
+        selectors: {
+            ".hyphenate": {
+                hyphen: Separator,
+                minWordLength: 4
+            }
+        }
+    }
+});
+
+</script>
+<script src="./syllables.js"></script>
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  document.getElementById("convert").addEventListener("click",function(){
+
+    Hyphenopoly.hyphenators["de"].then((hyphenator) => {
+
+      let syllableConverter = new SyllableConverter(
+        {
+          hyphenator : hyphenator,
+          exceptions : [ "E u r e", "E n t w i c k l e r"],
+          syllableOutputSeparator : "-",
+          syllableColors: ["black","black"]
+        }
+      );
+
+      let convertedText = syllableConverter.convertText( document.getElementById("source").innerText );
+  
+      document.getElementById("target").innerHTML = convertedText;
+
+    });
+  });
+}); 
+
+</script>
+
+</body>
+</html>
+

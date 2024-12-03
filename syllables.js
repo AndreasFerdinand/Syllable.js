@@ -14,6 +14,8 @@ var SyllableConverter = function( configuration ) {
 
 	var m_styleClassNames = configuration.styleClassNames ? configuration.styleClassNames : ["first_syllable","second_syllable"];
 
+	var m_syllableOutputSeparator = configuration.syllableOutputSeparator ? configuration.syllableOutputSeparator : "";
+
 	var m_wordCount = 0;
 
 	var m_exceptionsMap = new Map();
@@ -55,18 +57,20 @@ var SyllableConverter = function( configuration ) {
 	this.decorateWord = function( primarilyWord, syllables ) {
 		
 		let syllableCount = 0;
-		let htmlChunk = "";
+		let syllableHTML = "";
+		let htmlChunks = [];
 		
 		syllables.forEach( (syllable) => {
 			var fontColor = m_syllableColors[ syllableCount % m_syllableColors.length ];
 			var styleClassName = m_styleClassNames[ syllableCount % m_syllableColors.length ];
 
-			htmlChunk += '<font color="' + fontColor + '" class="' + styleClassName + '">' + syllable + '</font>';
+			syllableHTML = '<font color="' + fontColor + '" class="' + styleClassName + '">' + syllable + '</font>';
+			htmlChunks.push( syllableHTML );
 			
 			syllableCount++;
 		} );
-		
-		return htmlChunk;
+
+		return htmlChunks.join( m_syllableOutputSeparator );
 	};
 	
 	this.decorateOther = function( other ) {
@@ -92,6 +96,10 @@ var SyllableConverter = function( configuration ) {
 
 	this.setstyleClassNames = function( styleClassNames = ["first_syllable","second_syllable"]) {
 		m_styleClassNames = styleClassNames;
+	}
+
+	this.setSyllableOutputSeparator = function( syllableOutputSeparator = "" ) {
+		m_syllableOutputSeparator = syllableOutputSeparator;
 	}
 
 	this.convertText = function( text ) {
