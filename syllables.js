@@ -126,5 +126,3 @@ const SyllableConverter = function(configuration) {
 
     this.setExceptions(configuration.exceptions || []);
 };
-
-module.exports = SyllableConverter;
