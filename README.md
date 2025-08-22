@@ -245,10 +245,11 @@ By default Syllable.js splits the words in syllables and wraps them into `<font>
 <font color="blue">Foot</font><font color="red">ball</font>
 ```
 
-If you need to change the resulting html, need to capture the processed words or something else, a handler object must be implemented and passed to the converter. At least the two functions must be implemented by this handler object.
+If you need to change the resulting html, need to capture the processed words or something else, a handler object must be implemented and passed to the converter. At least the following functions must be implemented by this handler object.
 
-* `decorateWord` - Function to style the syllables of words.
+* `decorateWord` - Function to style the words.
 * `decorateOther` - Function to style all other characters, including line breaks and spaces.
+* `decorateSyllable` - Funciton to style the syllables.
 
 The following code shows how a custom converter can be used. A complete example implementation can be found in [customConverterExample.html](customConverterExample.html).
 
@@ -269,6 +270,9 @@ CustomConverter = function() {
   this.decorateOther = function( other ) {
     return other;
   };
+  this.decorateSyllable = function (syllable, fontColor, styleClassName, index) {
+    return syllableConverter.decorateSyllable(syllable, fontColor, styleClassName, index);
+  }
 };
 
 var customConverter = new CustomConverter( );

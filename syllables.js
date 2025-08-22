@@ -1,141 +1,130 @@
-var SyllableConverter = function( configuration ) {
+const SyllableConverter = function(configuration) {
+    const defaultTextSplitterRegex = /(?<Word>[\wüäöÜÄÖßẞ]+)|(?<Other>\s|[^\wüäöÜÄÖßẞ]+)/g;
 
-	const defaultTextSplitterRegex = /(?<Word>[\wüäöÜÄÖßẞ]+)|(?<Other>\s|[^\wüäöÜÄÖßẞ]+)/g;
+    const m_hyphenator = configuration.hyphenator;
+    const m_hyphenatorSeparator = configuration.hyphenatorSeparator || '•';
+    const m_exceptionSeparator = configuration.exceptionSeparator || ' ';
+    const m_textDecorator = configuration.textDecorator || this;
+    const m_textSplitterRegex = configuration.textSplitterRegex || defaultTextSplitterRegex;
 
-	
-	var m_hyphenator = configuration.hyphenator;
-	var m_hyphenatorSeparator = configuration.hyphenatorSeparator ? configuration.hyphenatorSeparator : '•';
-	var m_exceptionSeparator = configuration.exceptionSeparator ? configuration.exceptionSeparator : ' ';
-	var m_textDecorator = configuration.textDecorator ? configuration.textDecorator : this;
-	var m_textSplitterRegex = configuration.textSplitterRegex ? configuration.textSplitterRegex : defaultTextSplitterRegex;
+    let m_syllableColors = configuration.syllableColors || ["blue", "red"];
+    let m_otherColor = configuration.otherColor || "black";
 
-	var m_syllableColors = configuration.syllableColors ? configuration.syllableColors : [ "blue", "red" ];
-	var m_otherColor = configuration.otherColor ? configuration.otherColor : "black";
+    let m_styleClassNames = configuration.styleClassNames || ["first_syllable", "second_syllable"];
 
-	var m_styleClassNames = configuration.styleClassNames ? configuration.styleClassNames : ["first_syllable","second_syllable"];
+    const m_syllableOutputSeparator = configuration.syllableOutputSeparator || "";
 
-	var m_syllableOutputSeparator = configuration.syllableOutputSeparator ? configuration.syllableOutputSeparator : "";
+    let m_wordCount = 0;
 
-	var m_wordCount = 0;
+    const m_exceptionsMap = new Map();
 
-	var m_exceptionsMap = new Map();
+    const separateSyllables = (wordToSplit) => {
+        let syllableword = "";
+        let sourceposition = 0;
+        const exceptionPattern = m_exceptionsMap.get(wordToSplit.toLowerCase());
 
+        for (let i = 0; i < exceptionPattern.length; i++) {
+            if (exceptionPattern.charAt(i) === m_hyphenatorSeparator) {
+                syllableword += m_hyphenatorSeparator;
+            } else {
+                syllableword += wordToSplit.charAt(sourceposition);
+                sourceposition++;
+            }
+        }
 
-	separateSyllables = function(wordToSplit) {
- 
-		let syllableword = "";
-		let sourceposition = 0;
-		let exceptionPattern = m_exceptionsMap.get( wordToSplit.toLowerCase() );
+        return syllableword;
+    };
 
-		for (let i = 0; i < exceptionPattern.length; i++ ) {
-			if ( exceptionPattern.charAt(i) === m_hyphenatorSeparator ) {
-				syllableword = syllableword + m_hyphenatorSeparator
-			}
-			else {
-				syllableword = syllableword + wordToSplit.charAt(sourceposition);
+    this.setExceptions = (exceptions) => {
+        m_exceptionsMap.clear();
 
-				sourceposition = sourceposition + 1;
-			}
-		}
+        exceptions.forEach((exception) => {
+            const key = exception.toLowerCase().split(m_exceptionSeparator).join("");
+            const value = exception.toLowerCase().split(m_exceptionSeparator).join(m_hyphenatorSeparator);
 
-		return syllableword;
-	};
+            m_exceptionsMap.set(key, value);
+        });
+    };
 
+    this.decorateWord = (primarilyWord, syllables) => {
+        let syllableCount = 0;
+        const htmlChunks = [];
 
-	this.setExceptions = function( exceptions ) {
+        syllables.forEach((syllable) => {
+            const fontColor = m_syllableColors[syllableCount % m_syllableColors.length];
+            const styleClassName = m_styleClassNames[syllableCount % m_syllableColors.length];
 
-		m_exceptionsMap.clear();
+            const syllableHTML = m_textDecorator.decorateSyllable(syllable, fontColor, styleClassName, syllableCount);
+            htmlChunks.push(syllableHTML);
 
-		exceptions.forEach( (exception) => {
-			let key = exception.toLowerCase().split(m_exceptionSeparator).join("");
-			let value = exception.toLowerCase().split(m_exceptionSeparator).join(m_hyphenatorSeparator);
-			
-			m_exceptionsMap.set(key,value);
-		});
-	};
+            syllableCount++;
+        });
 
-	this.decorateWord = function( primarilyWord, syllables ) {
-		
-		let syllableCount = 0;
-		let syllableHTML = "";
-		let htmlChunks = [];
-		
-		syllables.forEach( (syllable) => {
-			var fontColor = m_syllableColors[ syllableCount % m_syllableColors.length ];
-			var styleClassName = m_styleClassNames[ syllableCount % m_syllableColors.length ];
+        return htmlChunks.join(m_syllableOutputSeparator);
+    };
 
-			syllableHTML = '<font color="' + fontColor + '" class="' + styleClassName + '">' + syllable + '</font>';
-			htmlChunks.push( syllableHTML );
-			
-			syllableCount++;
-		} );
+    this.decorateSyllable = (syllable, fontColor, styleClassName, index) => {
+        return `<font color="${fontColor}" class="${styleClassName}">${syllable}</font>`;
+    };
 
-		return htmlChunks.join( m_syllableOutputSeparator );
-	};
-	
-	this.decorateOther = function( other ) {
-		pattern = /[\n\r\s]+/;
+    this.decorateOther = (other) => {
+        const pattern = /[\n\r\s]+/;
 
-		if (pattern.test(other))
-		{
-			return other;
-		}
-		else
-		{
-			return'<font color="' + m_otherColor + '">' + other + '</font>';
-		}
-	};
-	
-	this.setSyllableColors = function( colors = [ "red", "blue" ] ) {
-		m_syllableColors = colors;
-	};
+        if (pattern.test(other)) {
+            return other;
+        } else {
+            return `<font color="${m_otherColor}">${other}</font>`;
+        }
+    };
 
-	this.setOtherColor = function( color ) {
-		m_otherColor = color;
-	}
+    this.setSyllableColors = (colors = ["red", "blue"]) => {
+        m_syllableColors = colors;
+    };
 
-	this.setstyleClassNames = function( styleClassNames = ["first_syllable","second_syllable"]) {
-		m_styleClassNames = styleClassNames;
-	}
+    this.setOtherColor = (color) => {
+        m_otherColor = color;
+    };
 
-	this.setSyllableOutputSeparator = function( syllableOutputSeparator = "" ) {
-		m_syllableOutputSeparator = syllableOutputSeparator;
-	}
+    this.setStyleClassNames = (styleClassNames = ["first_syllable", "second_syllable"]) => {
+        m_styleClassNames = styleClassNames;
+    };
 
-	this.convertText = function( text ) {
-		
-		let htmlChunk = "";
-		m_wordCount = 0;
-		
-		for (const match of text.matchAll(m_textSplitterRegex)) {
-			if ( typeof match.groups.Word !== 'undefined' ) {
-				
-				let currentWord = match.groups.Word;
-				let separatedWord = "";
-				
-				if ( m_exceptionsMap.has( currentWord.toLowerCase() ) ) {
-					separatedWord = separateSyllables( currentWord );
-				}
-				else {
-					separatedWord = m_hyphenator( currentWord );
-				}
-				
-				htmlChunk += m_textDecorator.decorateWord( currentWord, separatedWord.split( m_hyphenatorSeparator ) );
-				m_wordCount++;
-			}
-			
-			if ( typeof match.groups.Other !== 'undefined' ) {
-				
-				htmlChunk += m_textDecorator.decorateOther( match.groups.Other );
-			}	
-		}
-		
-		return htmlChunk;
-	};
-	
-	this.getWordCount = function( ) {
-		return m_wordCount;
-	};
+    this.setSyllableOutputSeparator = (syllableOutputSeparator = "") => {
+        m_syllableOutputSeparator = syllableOutputSeparator;
+    };
 
-	this.setExceptions( configuration.exceptions ? configuration.exceptions : [] );
+    this.convertText = (text) => {
+        let htmlChunk = "";
+        m_wordCount = 0;
+
+        for (const match of text.matchAll(m_textSplitterRegex)) {
+            if (match.groups.Word) {
+                const currentWord = match.groups.Word;
+                let separatedWord = "";
+
+                if (m_exceptionsMap.has(currentWord.toLowerCase())) {
+                    separatedWord = separateSyllables(currentWord);
+                } else {
+                    separatedWord = m_hyphenator(currentWord);
+                }
+
+                htmlChunk += m_textDecorator.decorateWord(currentWord, separatedWord.split(m_hyphenatorSeparator));
+                m_wordCount++;
+            }
+
+            if (match.groups.Other) {
+                htmlChunk += m_textDecorator.decorateOther(match.groups.Other);
+            }
+        }
+
+        return htmlChunk;
+    };
+
+    this.getWordCount = () => {
+        return m_wordCount;
+    };
+
+    this.setExceptions(configuration.exceptions || []);
 };
+
+module.exports = SyllableConverter;
